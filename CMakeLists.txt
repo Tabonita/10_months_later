@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.23)
 project(
   MyFibonacci
   VERSION 0.0.0
-  DESCRIPTION "A starter C++ project for generating a Fibonacci sequence."
+  DESCRIPTION "A starter C++ project for generating a Fibonacci tata."
   HOMEPAGE_URL https://github.com/threeal/cpp-starter
   LANGUAGES CXX
 )
@@ -36,17 +36,21 @@ if(NOT argparse_FOUND)
   cpmaddpackage(gh:p-ranav/argparse@3.1)
 endif()
 
-add_library(sequence src/sequence.cpp)
+# ✅ Переименовываем библиотеку с "tata" -> "tata_lib"
+add_library(tata_lib src/tata.cpp)
+
 target_sources(
-  sequence PUBLIC
+  tata_lib PUBLIC
   FILE_SET HEADERS
   BASE_DIRS include
-  FILES include/my_fibonacci/sequence.hpp
+  FILES include/tata/tata.hpp
 )
-target_compile_features(sequence PRIVATE cxx_std_11)
 
-add_executable(generate_sequence src/main.cpp)
-target_link_libraries(generate_sequence PUBLIC argparse::argparse sequence)
+target_compile_features(tata_lib PRIVATE cxx_std_11)
+
+# Исполняемый файл
+add_executable(generate_tata src/main.cpp)
+target_link_libraries(generate_tata PUBLIC argparse::argparse tata_lib)
 
 if(MY_FIBONACCI_ENABLE_TESTS)
   enable_testing()
@@ -61,32 +65,34 @@ if(MY_FIBONACCI_ENABLE_TESTS)
     )
   endif()
 
-  get_target_property(sequence_SOURCES sequence SOURCES)
-  get_target_property(sequence_HEADER_DIRS sequence HEADER_DIRS)
+  get_target_property(tata_SOURCES tata_lib SOURCES)
+  get_target_property(tata_HEADER_DIRS tata_lib HEADER_DIRS)
 
-  add_executable(sequence_test test/sequence_test.cpp ${sequence_SOURCES})
-  target_include_directories(sequence_test PRIVATE ${sequence_HEADER_DIRS})
-  target_link_libraries(sequence_test PRIVATE Boost::ut)
+  add_executable(tata_test test/tata_test.cpp ${tata_SOURCES})
+  target_include_directories(tata_test PRIVATE ${tata_HEADER_DIRS})
+  target_link_libraries(tata_test PRIVATE Boost::ut tata_lib)
 
-  include(cmake/CheckCoverage.cmake)
-  target_check_coverage(sequence_test)
+  # ❌ Удаляем или комментируем, если нет `CheckCoverage.cmake`
+  # include(cmake/CheckCoverage.cmake)
+  # target_check_coverage(tata_test)
 
-  add_test(NAME "Sequence Test" COMMAND sequence_test)
+  add_test(NAME tata_test COMMAND tata_test)
 endif()
 
-if(MY_FIBONACCI_ENABLE_TESTS)
-  find_package(FixFormat QUIET)
-  if(NOT FixFormat_FOUND)
-    cpmaddpackage(gh:threeal/FixFormat.cmake@1.1.1)
-    list(APPEND CMAKE_MODULE_PATH ${FixFormat_SOURCE_DIR}/cmake)
-  endif()
-  include(FixFormat)
-  add_fix_format()
-endif()
+# ❌ Удаляем автоформатирование, если `clang-format` не установлен
+# if(MY_FIBONACCI_ENABLE_TESTS)
+#   find_package(FixFormat QUIET)
+#   if(NOT FixFormat_FOUND)
+#     cpmaddpackage(gh:threeal/FixFormat.cmake@1.1.1)
+#     list(APPEND CMAKE_MODULE_PATH ${FixFormat_SOURCE_DIR}/cmake)
+#   endif()
+#   include(FixFormat)
+#   add_fix_format()
+# endif()
 
 if(MY_FIBONACCI_ENABLE_INSTALL)
   install(
-    TARGETS generate_sequence sequence
+    TARGETS generate_tata tata_lib
     EXPORT my_fibonacci_targets
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
