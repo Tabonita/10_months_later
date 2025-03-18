@@ -7,10 +7,16 @@ project(
   HOMEPAGE_URL https://github.com/threeal/cpp-starter
   LANGUAGES CXX
 )
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 
 option(MY_FIBONACCI_ENABLE_TESTS "Enable test targets.")
 option(MY_FIBONACCI_ENABLE_INSTALL "Enable install targets."
   "${PROJECT_IS_TOP_LEVEL}")
+
+
 
 function(cpmaddpackage)
   file(
@@ -48,8 +54,8 @@ target_sources(
 target_compile_features(functions_lib PRIVATE cxx_std_11)
 
 
-add_executable(generate_functions src/main.cpp)
-target_link_libraries(generate_functions PUBLIC argparse::argparse functions_lib)
+#add_executable(generate_functions src/main.cpp)
+#target_link_libraries(generate_functions PUBLIC argparse::argparse functions_lib)
 
 if(MY_FIBONACCI_ENABLE_TESTS)
   enable_testing()
@@ -77,13 +83,13 @@ endif()
 
 
 if(MY_FIBONACCI_ENABLE_INSTALL)
-  install(
-    TARGETS generate_functions functions_lib
-    EXPORT my_fibonacci_targets
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin
-    FILE_SET HEADERS
-  )
+install(
+  TARGETS functions_lib
+  EXPORT my_fibonacci_targets
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+  FILE_SET HEADERS
+)
 
   install(
     EXPORT my_fibonacci_targets

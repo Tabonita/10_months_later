@@ -2,14 +2,27 @@
 
 #include <algorithm>
 
-namespace my_fibonacci {
+namespace functions {
 
-std::vector<int> fibonacci_sequence(int n) {
-  std::vector<int> sequence(std::max(n, 0), 1);
-  for (int i{2}; i < n; ++i) {
-    sequence[i] = sequence[i - 2] + sequence[i - 1];
-  }
-  return sequence;
+template <typename result, typename first, typename second>
+result add (first a, second b) {
+  return a + b;
 }
 
-}  // namespace my_fibonacci
+template <typename result, typename first, typename second>
+result subtraction (first a, second b) {
+  return a - b;
+}
+
+template <typename result, typename first, typename second>
+result multiply (first a, second b) {
+   return a * b;
+}
+
+template <typename result, typename first, typename second>
+result divide (first a, second b) {
+  return (double)a/(double)b;
+}
+
+
+}  // namespace functions
